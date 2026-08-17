@@ -1,6 +1,6 @@
 ---
 name: flamingo
-description: Use when the user has a vague idea, feature request, or bug they want turned into a structured work item (user story, bug report, epic, project brief) — runs an adaptive interview, drafts the item from a template in the configured output language, and after approval files it to Linear via MCP or emits markdown.
+description: Use when the user has a vague idea, feature request, or bug they want turned into a structured work item (user story, bug report, epic, project brief) — runs an adaptive interview, drafts the item from a template in the configured output language, and after approval files it to Linear or Akiflow via MCP or emits markdown.
 ---
 
 # Flamingo — from vague idea to structured work item
@@ -100,6 +100,7 @@ After approval, offer destinations, config default first:
 
 - **Linear** — read `references/linear.md` next to this SKILL.md and follow it.
 - **Jira** — read `references/jira.md` and follow it.
+- **Akiflow** — read `references/akiflow.md` next to this SKILL.md and follow it.
 - **Markdown** — print the final document; offer to save it to a file the user
   names. Always available, and the fallback whenever a tracker is unreachable.
 

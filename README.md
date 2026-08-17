@@ -2,7 +2,7 @@
 
 Claude Code plugin that turns vague ideas into structured work items
 (user story, bug report, epic, project brief) through an adaptive
-interview, then files them to Linear via MCP or emits markdown.
+interview, then files them to Linear or Akiflow via MCP or emits markdown.
 
 ## Use
 
