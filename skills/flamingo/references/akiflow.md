@@ -20,8 +20,12 @@ and projects that flamingo never creates. Map by `target`:
 
 Ask which existing Akiflow project to file the top-level (parent) task into,
 via `list_projects` (offer the config default first if set); none chosen →
-leave `project_id` unset so the task lands in the inbox. Never create Akiflow
-projects (epic non-goal).
+leave `project_id` unset. The task still lands in the Inbox because `## Create`
+below always sets `status: inbox`, regardless of `project_id`. Caveat: per
+the `create_task` schema, a task left without `project_id` "may get a project
+predicted for it" — Akiflow itself can still auto-categorize the task into a
+project the user never picked; this is outside flamingo's control. Never
+create Akiflow projects (epic non-goal).
 
 ## Create
 
