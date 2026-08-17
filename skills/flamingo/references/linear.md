@@ -3,16 +3,16 @@
 Requires the Linear MCP server (tools named `mcp__linear__*`). If unavailable,
 say so and fall back to markdown output — never error out, never lose the draft.
 
-## Resolve destination
+## Destination mapping
 
-1. Team: use the config default if set; otherwise call `list_teams` and let the
-   user pick via AskUserQuestion.
-2. `target: issue` → a Linear issue. Optionally attach to a project (config
+1. `target: issue` → a Linear issue. Optionally attach to a project (config
    default, or ask via `list_projects`; attaching is optional — skipping is
    fine). `target: project` → a Linear project. `target: initiative` → a
    Linear initiative with its projects and their issues.
+2. Team: use the config default if set; otherwise call `list_teams` and let the
+   user pick via AskUserQuestion.
 
-## Create the item
+## Create
 
 - **Issue** (`target: issue`): `save_issue` with `title` = drafted title,
   `description` = full drafted markdown minus the title heading, `team` = the
@@ -49,7 +49,11 @@ say so and fall back to markdown output — never error out, never lose the draf
   `project` = the created project's name (or ID), title = the line without
   its bullet marker.
 
-## Report
+## Lossiness
+
+Linear represents all built-in template structures — nothing flattens.
+
+## Report & errors
 
 Give the user the URL(s) of everything created. On any tool error: show the
 error, print the full markdown draft, and stop — do not blindly retry writes.

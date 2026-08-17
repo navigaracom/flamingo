@@ -105,6 +105,11 @@ After approval, offer destinations, config default first:
 
 After a successful tracker export, report the created item's URL(s).
 
+Before exporting, check the chosen destination's `## Lossiness` section in its
+reference. If parts of the draft cannot be represented there, tell the user
+exactly what will flatten, and offer to save the full markdown to a file as a
+backup alongside the export.
+
 After the first successful export of any kind — Linear, Jira, or markdown —
 if `~/.claude/flamingo/config.md` does not exist yet, offer once to create it
 with the choices just used (output language, tracker, team/project) as
