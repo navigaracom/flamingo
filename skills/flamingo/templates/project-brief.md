@@ -27,6 +27,9 @@ target: project
 ## Milestones
 1. <milestone — an outcome, not an activity>
 
+## Child issues
+- <optional: first issues to create inside the project; drop section if none>
+
 ## Risks
 - <risk>
 

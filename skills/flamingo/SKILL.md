@@ -37,8 +37,8 @@ interview, then file it where the user wants it.
    user templates in `~/.claude/flamingo/templates/`. A user template whose
    `name` matches a built-in replaces it.
 3. Each template's frontmatter defines: `name`, `description`, `depth`
-   (quick|standard|deep), `target` (issue|project). HTML comments in the body
-   are interviewer guidance — never include them in any output.
+   (quick|standard|deep), `target` (issue|project|initiative). HTML comments
+   in the body are interviewer guidance — never include them in any output.
 
 ## Phase 1 — Get the idea and pick a format
 
