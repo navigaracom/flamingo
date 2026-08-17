@@ -37,6 +37,7 @@ flamingo/                          ← toto repo
       references/
         linear.md                  ← mapování polí šablon na Linear MCP tooly
         jira.md                    ← postup pro Jiru (dnes fallback na markdown)
+        codebase-analysis.md       ← read-only průzkum repa pro informovaný rozhovor
   docs/superpowers/specs/          ← tento dokument
 ```
 
@@ -106,6 +107,20 @@ pokyny pro tazatele (na co se ptát, co je povinné) a do výstupu se nedostanou
    - **Jira**: dnes bez MCP → fallback na markdown s poznámkou, že po připojení
      Jira MCP půjde zakládat přímo (postup v `references/jira.md`).
    - **Markdown**: vypsat / uložit do souboru — funguje vždy, i bez jakéhokoli MCP.
+
+## Analýza codebase (dle docs/epics/analyza-codebase.md)
+
+Mezi volbou formátu a rozhovorem (fáze 1.5): pokud se nápad týká kódu
+v aktuálním repozitáři (detekce: nápad popisuje změnu chování softwaru
+a pracovní adresář obsahuje odpovídající kód), skill provede rychlý
+(~30–60 s) read-only průzkum přes subagenta — struktura repa, dotčené moduly,
+existující podobná funkcionalita. Nálezy slouží výhradně dvěma účelům:
+informované otázky v rozhovoru (místo obecných) a dekompozice na child issues
+podle reálných švů kódu. Ve výstupním work itemu se žádná technická sekce
+neobjeví; žádné odhady pracnosti. Při nerelevanci se průzkum přeskočí a tok
+je beze změny; bez dostupného subagenta krátký přímý průzkum, případně
+přeskočení — analýza nikdy neblokuje tok. Postup v
+`references/codebase-analysis.md`.
 
 ## Ošetření chyb
 
