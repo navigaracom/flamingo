@@ -33,6 +33,7 @@ flamingo/                          ← toto repo
         bug-report.md
         epic.md
         project-brief.md
+        initiative.md
       references/
         linear.md                  ← mapování polí šablon na Linear MCP tooly
         jira.md                    ← postup pro Jiru (dnes fallback na markdown)
@@ -65,7 +66,7 @@ Markdown s frontmatter; frontmatter řídí interview i export:
 name: user-story
 description: Uživatelský příběh s akceptačními kritérii
 depth: standard          # quick | standard | deep — hloubka interview
-target: issue            # issue | project — co se v trackeru založí
+target: issue            # issue | project | initiative — co se v trackeru založí
 ---
 ## Story
 Jako <role> chci <cíl>, abych <přínos>.
@@ -94,9 +95,14 @@ pokyny pro tazatele (na co se ptát, co je povinné) a do výstupu se nedostanou
 4. **Draft a ladění.** Vyplní šablonu v jazyce výstupu, ukáže náhled, iteruje
    podle připomínek, dokud uživatel neschválí.
 5. **Export.** Nabídne cíle:
-   - **Linear** (MCP): `save_issue` / `save_project` podle `target`; team/projekt
-     z configu, jinak dotazem (`list_teams` / `list_projects`). Epic = parent issue
-     s pod-issues, pokud interview identifikovalo dílčí kroky. Vrátí URL.
+   - **Linear** (MCP): `save_issue` / `save_project` / `save_initiative` podle
+     `target`; team/projekt z configu, jinak dotazem (`list_teams` /
+     `list_projects`). Hierarchie: epic = parent issue s pod-issues; projekt
+     (project-brief) volitelně s issues uvnitř (sekce `## Child issues`);
+     initiative = `save_initiative` → per projekt `save_project` navázaný na
+     initiative → per issue `save_issue` s teamem a projektem. Issues per
+     projekt jsou u initiative volitelné — interview je nevynucuje, doplní se
+     později samostatnými běhy. Vrátí URL všeho založeného.
    - **Jira**: dnes bez MCP → fallback na markdown s poznámkou, že po připojení
      Jira MCP půjde zakládat přímo (postup v `references/jira.md`).
    - **Markdown**: vypsat / uložit do souboru — funguje vždy, i bez jakéhokoli MCP.
