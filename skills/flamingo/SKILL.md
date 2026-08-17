@@ -25,7 +25,14 @@ interview, then file it where the user wants it.
 1. Read `~/.claude/flamingo/config.md` if it exists. It may define: default
    output language, default tracker, default Linear team and project. Missing
    file or missing keys → defaults: output language = the language the idea was
-   written in; tracker = ask at export time.
+   written in; tracker = ask at export time. Example:
+
+   ```
+   output language: English
+   tracker: linear
+   linear team: Growth
+   linear project: Onboarding revamp
+   ```
 2. Collect templates: built-in ones in `templates/` next to this SKILL.md, plus
    user templates in `~/.claude/flamingo/templates/`. A user template whose
    `name` matches a built-in replaces it.
@@ -66,7 +73,11 @@ Rules:
 
 1. Fill the template body in the output language, translating section headings
    into that language as well. Drop sections that are genuinely inapplicable
-   instead of leaving placeholders. Mark guesses as `[assumption: …]`.
+   instead of leaving placeholders. Mark guesses as `[assumption: …]`. Even
+   when headings are translated, each remaining section still corresponds to
+   the same section in the template — export logic (see
+   `references/linear.md`) matches sections by that template correspondence,
+   never by the rendered heading text.
 2. Show the complete draft as a fenced markdown preview.
 3. Ask whether to approve or what to change. Every edit request produces an
    updated full preview. Iterate until the user approves.
@@ -80,7 +91,9 @@ After approval, offer destinations, config default first:
 - **Markdown** — print the final document; offer to save it to a file the user
   names. Always available, and the fallback whenever a tracker is unreachable.
 
-After a successful tracker export, report the created item's URL(s). If
-`~/.claude/flamingo/config.md` does not exist yet, offer once to create it
+After a successful tracker export, report the created item's URL(s).
+
+After the first successful export of any kind — Linear, Jira, or markdown —
+if `~/.claude/flamingo/config.md` does not exist yet, offer once to create it
 with the choices just used (output language, tracker, team/project) as
 defaults — write it only if the user agrees.
