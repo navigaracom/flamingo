@@ -56,6 +56,34 @@ Variant 2 (irrelevant: "we should revamp our pricing tiers", epic): analysis
 correctly skipped citing Phase 1.5's gate ("when unsure, skip"), flow
 continued unchanged into the Phase 2 interview.
 
+## Scenario G — per-platform target translation (Tasks 9–10): PASS
+
+Same state for all three (approved epic draft, 3 child issues):
+- **Linear**: parent `save_issue` (team from config) + 3 child `save_issue`
+  with `parentId` + `team`; no lossiness warning (reference declares nothing
+  flattens). Correct.
+- **Jira**: parent as issue type Epic (mapping by template name), 3 children
+  as subtasks/linked issues; user-story → Story, bug-report → Bug, custom
+  "spike" → Task with the choice announced. Correct.
+- **Akiflow**: `list_projects` first, parent `create_task` (title, body as
+  description, `status: inbox`, chosen `project_id` or omitted), 3× child
+  `create_task` with `parent_task_id`, `project_id` unset (inherits). Never
+  creates projects; no lossiness warning for target issue, correct flatten
+  warning + markdown backup offer described for project-brief. Correct.
+
+## Live Akiflow export (Task 11 E2E): PASS
+
+Executed for real against the connected Akiflow MCP on 2026-08-18:
+parent `[flamingo test] export check` (69298773-53fc-4418-b4c4-3f4f0140eb83)
++ 2 subtasks (be5abbcf…, ea06eb38…), all `status: inbox`; `get_task` on the
+parent confirmed `subtask_count: 2` with both children attached and project
+inherited. Cleanup: children trashed first, then the parent (trashing a
+parent would detach children), all three confirmed `status: trashed`.
+Notable: Akiflow auto-predicted project "Playground (Navigara)" for the
+parent despite `project_id` being omitted — live confirmation of the
+prediction caveat documented in references/akiflow.md after Task 10's review.
+
 ## Result
 
-7/7 PASS at first run — no SKILL.md changes required.
+11/11 PASS — one wording fix round in Task 10 (inbox/prediction caveat),
+otherwise no changes required.
