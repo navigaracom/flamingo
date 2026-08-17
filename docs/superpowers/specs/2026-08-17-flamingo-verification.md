@@ -34,6 +34,16 @@ Observed: no retry, error shown plainly, full approved draft printed in a
 fenced block, flow stops, user chooses the next step (retry / Jira / file).
 Draft never lost; no silent fallback.
 
+## Scenario E — initiative hierarchy export (Task 7): PASS
+
+State: approved initiative draft with 2 projects (one with 3 issue bullets, one
+with none), Linear chosen, team resolved from config.
+Observed: zero tracker writes before approval; then exactly `save_initiative` →
+`save_project` (addTeams + addInitiatives) → 3× `save_issue` (team + project) →
+second `save_project` with no issue calls (empty bullet list respected). URLs
+of everything created reported, including the note that the second project has
+no issues yet. Matches references/linear.md @ 4e89870.
+
 ## Result
 
-4/4 PASS at first run — no SKILL.md changes required.
+5/5 PASS at first run — no SKILL.md changes required.
