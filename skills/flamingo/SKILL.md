@@ -50,6 +50,15 @@ interview, then file it where the user wants it.
   user-story), propose that template and confirm. Otherwise present the
   template list (each `name` + `description`) via AskUserQuestion.
 
+## Phase 1.5 — Codebase analysis (conditional)
+
+If the idea describes changing, fixing, or extending the behavior of software
+whose code plausibly lives in the current working directory (quick check:
+source files or a project manifest are present and the idea's domain matches),
+read `references/codebase-analysis.md` next to this SKILL.md and follow it
+before interviewing. Otherwise skip this phase entirely — the flow is
+unchanged. When unsure, skip; a generic interview beats a misleading scan.
+
 ## Phase 2 — Adaptive interview
 
 Depth comes from the chosen template's `depth`:
@@ -68,6 +77,9 @@ Rules:
 - Never ask about something the idea already states — restate it back instead.
 - Track template sections left unanswered; they become `[assumption: …]` lines
   in the draft.
+- With codebase-analysis findings available, prefer informed questions that
+  name the real modules over generic ones, and ground proposed child issues
+  in the code's actual structure (see the reference's "Use the findings").
 
 ## Phase 3 — Draft and refine
 
