@@ -44,6 +44,18 @@ second `save_project` with no issue calls (empty bullet list respected). URLs
 of everything created reported, including the note that the second project has
 no issues yet. Matches references/linear.md @ 4e89870.
 
+## Scenario F — codebase analysis (Task 8): PASS
+
+Variant 1 (relevant: "add CSV export to the reports page" in a TS web app repo,
+user-story): agent ran Phase 1.5 — dispatched one read-only explore subagent
+with the reference's exact ask and ~1 min budget; first interview question
+named the real modules found (shared download helper in pdfExport.ts, the
+ReportsPage data hook) and offered the user a correctable observation; draft
+contains no technical/files section and no scan-derived estimate.
+Variant 2 (irrelevant: "we should revamp our pricing tiers", epic): analysis
+correctly skipped citing Phase 1.5's gate ("when unsure, skip"), flow
+continued unchanged into the Phase 2 interview.
+
 ## Result
 
-5/5 PASS at first run — no SKILL.md changes required.
+7/7 PASS at first run — no SKILL.md changes required.
