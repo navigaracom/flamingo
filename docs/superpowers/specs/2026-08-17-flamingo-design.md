@@ -38,6 +38,7 @@ flamingo/                          ← toto repo
         linear.md                  ← mapování polí šablon na Linear MCP tooly
         jira.md                    ← postup pro Jiru (dnes fallback na markdown)
         codebase-analysis.md       ← read-only průzkum repa pro informovaný rozhovor
+        akiflow.md                 ← export do Akiflow (tasky se subtasky)
   docs/superpowers/specs/          ← tento dokument
 ```
 
@@ -104,9 +105,23 @@ pokyny pro tazatele (na co se ptát, co je povinné) a do výstupu se nedostanou
      initiative → per issue `save_issue` s teamem a projektem. Issues per
      projekt jsou u initiative volitelné — interview je nevynucuje, doplní se
      později samostatnými běhy. Vrátí URL všeho založeného.
-   - **Jira**: dnes bez MCP → fallback na markdown s poznámkou, že po připojení
-     Jira MCP půjde zakládat přímo (postup v `references/jira.md`).
+   - **Jira**: issue type podle šablony — `epic` → Epic, `user-story` → Story,
+     `bug-report` → Bug, ostatní šablony s `target: issue` → Task;
+     `target: initiative/project` zůstávají jako dosud (Epic + vysvětlení).
+     Bez MCP fallback na markdown (postup v `references/jira.md`).
+   - **Akiflow** (`references/akiflow.md`): vše jako tasky, hierarchie přes
+     `parent_task_id` (parent → subtasky; u initiative projekty jako subtasky
+     a jejich issues o úroveň níž). Při exportu nabídka existujících projektů
+     přes `list_projects`; Akiflow projekty se nikdy nezakládají; bez volby
+     projektu jde task do inboxu. Bez MCP fallback na markdown.
    - **Markdown**: vypsat / uložit do souboru — funguje vždy, i bez jakéhokoli MCP.
+
+   Překlad abstraktního `target` na konkrétní objekty vlastní každý reference
+   soubor (jednotná struktura: mapování → vytvoření → ztrátovost → report a
+   chyby); SKILL.md zůstává tracker-agnostický. **Ztrátovost:** pokud cílová
+   platforma neumí část draftu reprezentovat (např. bohatý project-brief do
+   Akiflow tasku), skill před exportem řekne, co se sploští, a nabídne uložení
+   plného markdownu jako zálohy.
 
 ## Analýza codebase (dle docs/epics/analyza-codebase.md)
 
