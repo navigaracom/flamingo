@@ -3,8 +3,8 @@
 Quick read-only reconnaissance of the current repository so the interview
 asks informed questions and the decomposition matches the real code
 structure. Findings live in the conversation only — they NEVER appear as a
-technical section in the drafted work item, and no effort estimates are
-derived from them.
+technical section in the drafted work item, and no effort, complexity, or
+story-point estimates are derived from them.
 
 ## Run the scan
 

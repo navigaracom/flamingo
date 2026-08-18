@@ -19,8 +19,10 @@ and projects that flamingo never creates. Map by `target`:
   project subtask).
 
 Ask which existing Akiflow project to file the top-level (parent) task into,
-via `list_projects` (offer the config default first if set); none chosen →
-leave `project_id` unset. The task still lands in the Inbox because `## Create`
+via `list_projects` (offer the config default first if set); returned names
+may embed icon/folder decorations (e.g. "📁 Roadmap (Work)") — match the
+config default tolerantly (substring/name-part), not by exact string. None
+chosen → leave `project_id` unset. The task still lands in the Inbox because `## Create`
 below always sets `status: inbox`, regardless of `project_id`. Caveat: per
 the `create_task` schema, a task left without `project_id` "may get a project
 predicted for it" — Akiflow itself can still auto-categorize the task into a
@@ -61,11 +63,11 @@ the tree goes.
 
 ## Report & errors
 
-Report each created task's title and id (Akiflow's tools return no URL). No
-Akiflow MCP connected: say so, print the final markdown for copy-paste, and
-mention that connecting the Akiflow MCP enables direct creation. On any tool
-error: show the error, print the full markdown draft, and stop — no blind
-retries.
+`create_task` returns a task URL (link.akiflow.com) — report those URLs
+(plus titles) for everything created, and ids where useful. No Akiflow MCP
+connected: say so, print the final markdown for copy-paste, and mention that
+connecting the Akiflow MCP enables direct creation. On any tool error: show
+the error, print the full markdown draft, and stop — no blind retries.
 
 Create the tree top-down, parent before children. On a mid-tree tool error,
 report what was already created (names + URLs/ids), print every

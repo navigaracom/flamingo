@@ -10,7 +10,9 @@ say so and fall back to markdown output — never error out, never lose the draf
    fine). `target: project` → a Linear project. `target: initiative` → a
    Linear initiative with its projects and their issues.
 2. Team: use the config default if set; otherwise call `list_teams` and let the
-   user pick via AskUserQuestion.
+   user pick via AskUserQuestion. When matching the config default against
+   `list_teams`/`list_projects` results, match tolerantly (substring/name-part)
+   — returned names may embed icon/folder decorations, not just the plain name.
 
 ## Create
 
@@ -33,7 +35,11 @@ say so and fall back to markdown output — never error out, never lose the draf
   `description` instead of the one-sentence link to the parent, and recurse
   into that sub-draft's own child items the same way — sub-issues may nest
   under sub-issues, each new level's `parentId` pointing at the issue just
-  created for its parent.
+  created for its parent. Project attachment is not assumed to inherit on
+  nested sub-issues: when the tree's issues belong to a created project,
+  every nested `save_issue` (level 3 and deeper) passes `project` = that
+  project explicitly, alongside the always-required `team` — this avoids
+  relying on undocumented inheritance.
 - **Project** (`target: project`): `save_project` with `name` and the drafted
   body as `description`. `save_project` has no `team` field — pass the
   resolved team via `addTeams` (or `setTeams`); `name` plus at least one of
