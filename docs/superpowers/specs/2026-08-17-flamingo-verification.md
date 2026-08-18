@@ -111,7 +111,26 @@ children + un-elaborated siblings):
   full body, children → subtasks; pre-export warning names exactly what
   flattens and offers the markdown backup.
 
+## Scenario J — entry preselection and scale check (Tasks 15–16): PASS
+
+Variant 1 (/flamingo:epic "add rate limiting to our public API" in the API's
+repo): no format question asked; scale judged a fit, no false flag; Phase 1.5
+codebase scan ran before the interview and the first question named the real
+middleware layer. Variant 2 (/flamingo:issue with a clearly epic-scale
+onboarding rebuild): mismatch flagged once with epic offered; "ne, chci fakt
+jen issue" → user's choice respected, user-story picked per the issue rule;
+"dej epic" → template switched, deep interview.
+
+## Scenario K — settings (Task 16): PASS
+
+Existing config shown first; unambiguous request ("tracker → akiflow")
+confirmed without a redundant question; missing template fields asked one at
+a time; resulting config is plain key: value lines; spike template composed
+in the built-ins' exact format (frontmatter + HTML interviewer guidance),
+shown for confirmation before writing to ~/.claude/flamingo/templates/;
+plugin files read-only throughout.
+
 ## Result
 
-14/14 PASS — one wording fix round in Task 10 (inbox/prediction caveat),
-otherwise no changes required.
+17/17 PASS — one wording fix round in Task 10 and one description-gating fix
+in Task 16, otherwise no changes required.
