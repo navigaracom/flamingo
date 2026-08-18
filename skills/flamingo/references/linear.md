@@ -28,7 +28,12 @@ say so and fall back to markdown output — never error out, never lose the draf
   `parentId` = the parent's id and description = one sentence linking it to
   the parent. For a project target (project-brief), create these after the
   project exists and set `project` = the new project's name or ID instead of
-  `parentId`.
+  `parentId`. When a child item has an approved sub-draft (Phase 3.5), use
+  the sub-draft's title and its full body as the created issue's
+  `description` instead of the one-sentence link to the parent, and recurse
+  into that sub-draft's own child items the same way — sub-issues may nest
+  under sub-issues, each new level's `parentId` pointing at the issue just
+  created for its parent.
 - **Project** (`target: project`): `save_project` with `name` and the drafted
   body as `description`. `save_project` has no `team` field — pass the
   resolved team via `addTeams` (or `setTeams`); `name` plus at least one of
@@ -42,9 +47,14 @@ say so and fall back to markdown output — never error out, never lose the draf
   and the section corresponding to the template's `## Projects` section,
   whatever its translated heading. Then, for each `### <project name>`
   subsection of that Projects section: `save_project` with the subsection's
-  name, the subsection's goal text as `description`, the resolved team via
-  `addTeams`, and `addInitiatives` = the created initiative's name (or ID) to
-  link it to the initiative. Then each bullet under that subsection becomes
+  name, the resolved team via `addTeams`, and `addInitiatives` = the created
+  initiative's name (or ID) to link it to the initiative. If that project
+  subsection has an approved sub-draft, its title and full body become the
+  new project's `description` (instead of the subsection's goal text), and
+  the sub-draft's own `## Child issues` section is created inside the new
+  project exactly as in the Child issues bullet above, recursing into any of
+  those issues' further sub-drafts the same way. Otherwise `description` =
+  the subsection's goal text, and each bullet under the subsection becomes
   `save_issue` with `team` = the resolved team (required on create) and
   `project` = the created project's name (or ID), title = the line without
   its bullet marker.
@@ -52,8 +62,15 @@ say so and fall back to markdown output — never error out, never lose the draf
 ## Lossiness
 
 Linear represents all built-in template structures — nothing flattens.
+Linear represents arbitrary issue nesting and initiative → project → issue;
+no depth flattening.
 
 ## Report & errors
 
 Give the user the URL(s) of everything created. On any tool error: show the
 error, print the full markdown draft, and stop — do not blindly retry writes.
+
+Create the tree top-down, parent before children. On a mid-tree tool error,
+report what was already created (names + URLs/ids), print every
+not-yet-exported sub-draft as markdown so nothing is lost, and stop — no
+blind retries, no rollback attempts.

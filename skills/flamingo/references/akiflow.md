@@ -41,7 +41,12 @@ inbox`, `parent_task_id` = the appropriate parent (the top-level task, or for
 initiative sub-subtasks, the project subtask created just before it) — and
 leave `project_id` unset on every child: Akiflow inherits the parent's
 project (and tags) automatically for any field a child call omits, so
-children need not, and should not, set it explicitly.
+children need not, and should not, set it explicitly. An item with an
+approved sub-draft (Phase 3.5) gets the sub-draft's title and full body as
+its task's `description` instead of a bare line, and its own child items
+recurse into subtasks the same way — via `parent_task_id` pointing at the
+task just created for their parent, at any depth, since Akiflow subtasks
+nest arbitrarily.
 
 ## Lossiness
 
@@ -50,7 +55,9 @@ flattens into task text: goals, non-goals, risks, success criteria,
 acceptance criteria, and milestones survive only as markdown inside the
 relevant task's description, never as separate Akiflow objects. Always
 triggers the Phase 4 lossiness warning for `target: project|initiative` (see
-SKILL.md) and offer the markdown backup.
+SKILL.md) and offer the markdown backup. Tree depth itself does not flatten —
+every level of an elaborated sub-draft becomes its own subtask, however deep
+the tree goes.
 
 ## Report & errors
 
@@ -59,3 +66,8 @@ Akiflow MCP connected: say so, print the final markdown for copy-paste, and
 mention that connecting the Akiflow MCP enables direct creation. On any tool
 error: show the error, print the full markdown draft, and stop — no blind
 retries.
+
+Create the tree top-down, parent before children. On a mid-tree tool error,
+report what was already created (names + URLs/ids), print every
+not-yet-exported sub-draft as markdown so nothing is lost, and stop — no
+blind retries, no rollback attempts.
