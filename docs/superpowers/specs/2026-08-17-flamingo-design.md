@@ -192,6 +192,12 @@ plugin users tier-named entry points (`/flamingo:issue`, `/flamingo:epic`,
 - **`settings`** is the one entry with own logic: show/edit
   `~/.claude/flamingo/config.md` and list or scaffold custom templates. It
   never modifies plugin files.
+- **`help`** (added 2026-08-18): explains flamingo — capabilities, which
+  entry/tier to use, configuration, and why an export behaved as it did.
+  Grounded strictly in the plugin's own files (SKILL.md, templates,
+  references) and the user's config — read, never guess; answers in the
+  user's language. If the question turns out to be an idea to shape, it
+  hands over to the fitting entry.
 - Symlink users keep `/flamingo` only; entry skills are a plugin-install
   benefit (generic names like `issue` are too collision-prone as global
   personal skills). Custom user templates get no entry skill — they remain
