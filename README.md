@@ -49,6 +49,7 @@ Plugin installs get namespaced entry points:
 | `/flamingo:project` | a deliverable with milestones (Linear Project) |
 | `/flamingo:initiative` | a multi-project strategic effort (Linear Initiative) |
 | `/flamingo:settings` | configure defaults and custom templates |
+| `/flamingo:help` | explain flamingo, recommend an entry, troubleshoot |
 
 Entries preselect the tier but sanity-check it: if your idea is clearly
 bigger or smaller than the entry you picked, flamingo offers the better fit.
