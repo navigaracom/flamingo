@@ -88,7 +88,30 @@ Notable: Akiflow auto-predicted project "Playground (Navigara)" for the
 parent despite `project_id` being omitted — live confirmation of the
 prediction caveat documented in references/akiflow.md after Task 10's review.
 
+## Scenario H — elaboration offer and recursion (Task 12): PASS
+
+Approved initiative draft, 2 projects: single multi-select offer ("none"
+valid); selected project → project-brief interview at its own deep depth,
+already-answered content restated not re-asked; approved sub-draft with 4
+child issues → recursive offer; "dost, exportuj" respected — un-elaborated
+items stay one-liners and export proceeds over the whole tree. Negative
+state (approved bug-report, no child section): no offer, straight to Phase 4.
+
+## Scenario I — whole-tree export (Task 13): PASS
+
+4-level tree (initiative → elaborated project → elaborated issue → 2 one-line
+children + un-elaborated siblings):
+- **Akiflow**: 7 `create_task` calls in correct top-down order; sub-draft
+  bodies as descriptions, one-liners title-only; `project_id` only on the
+  root, children inherit; no depth flattening. Mid-tree failure at call 4:
+  error shown, tasks 1–3 reported with ids, remaining items printed as
+  markdown, stop — no retry, no rollback.
+- **Jira**: initiative + project correctly collapse into a single Epic
+  (project brief folded into Epic description), elaborated issue → Story with
+  full body, children → subtasks; pre-export warning names exactly what
+  flattens and offers the markdown backup.
+
 ## Result
 
-11/11 PASS — one wording fix round in Task 10 (inbox/prediction caveat),
+14/14 PASS — one wording fix round in Task 10 (inbox/prediction caveat),
 otherwise no changes required.
