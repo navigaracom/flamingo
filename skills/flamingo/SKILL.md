@@ -50,6 +50,16 @@ interview, then file it where the user wants it.
   user-story), propose that template and confirm. Otherwise present the
   template list (each `name` + `description`) via AskUserQuestion.
 
+An entry skill may preselect the template (the issue / epic / project /
+initiative shortcuts). Preselection skips the format question but not
+judgment: whether the template was preselected or chosen here, if the idea's
+scale clearly mismatches the tier — a multi-project strategy aimed at a
+single issue, or a one-line fix aimed at an initiative — say so once and
+offer the better-fitting template. The user's choice wins either way. For
+the `issue` entry, pick between user-story and bug-report from the idea
+(a crash or wrong behavior → bug-report; a capability → user-story; ask
+when unclear).
+
 ## Phase 1.5 — Codebase analysis (conditional)
 
 If the idea describes changing, fixing, or extending the behavior of software
