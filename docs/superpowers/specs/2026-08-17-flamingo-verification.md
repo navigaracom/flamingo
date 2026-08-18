@@ -130,7 +130,17 @@ in the built-ins' exact format (frontmatter + HTML interviewer guidance),
 shown for confirmation before writing to ~/.claude/flamingo/templates/;
 plugin files read-only throughout.
 
+## Scenario L — help grounding and handover (Task 18): PASS
+
+Question "why did Jira give me just one Epic from an initiative with two
+projects?": answered in the user's Czech, grounded in jira.md's Destination
+mapping + Lossiness (Epic collapse explained as intended behavior, lossiness
+warning and markdown backup mentioned), no invented behavior; files consulted
+were reported and correct. Question "I have an onboarding idea, what now?":
+recognized as an idea, tier recommended by scope, handed over to the workflow
+instead of lecturing.
+
 ## Result
 
-17/17 PASS — one wording fix round in Task 10 and one description-gating fix
+18/18 PASS — one wording fix round in Task 10 and one description-gating fix
 in Task 16, otherwise no changes required.
