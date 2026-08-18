@@ -33,9 +33,12 @@ flamingo/                          ← toto repo
         bug-report.md
         epic.md
         project-brief.md
+        initiative.md
       references/
         linear.md                  ← mapování polí šablon na Linear MCP tooly
         jira.md                    ← postup pro Jiru (dnes fallback na markdown)
+        codebase-analysis.md       ← read-only průzkum repa pro informovaný rozhovor
+        akiflow.md                 ← export do Akiflow (tasky se subtasky)
   docs/superpowers/specs/          ← tento dokument
 ```
 
@@ -65,7 +68,7 @@ Markdown s frontmatter; frontmatter řídí interview i export:
 name: user-story
 description: Uživatelský příběh s akceptačními kritérii
 depth: standard          # quick | standard | deep — hloubka interview
-target: issue            # issue | project — co se v trackeru založí
+target: issue            # issue | project | initiative — co se v trackeru založí
 ---
 ## Story
 Jako <role> chci <cíl>, abych <přínos>.
@@ -94,12 +97,70 @@ pokyny pro tazatele (na co se ptát, co je povinné) a do výstupu se nedostanou
 4. **Draft a ladění.** Vyplní šablonu v jazyce výstupu, ukáže náhled, iteruje
    podle připomínek, dokud uživatel neschválí.
 5. **Export.** Nabídne cíle:
-   - **Linear** (MCP): `save_issue` / `save_project` podle `target`; team/projekt
-     z configu, jinak dotazem (`list_teams` / `list_projects`). Epic = parent issue
-     s pod-issues, pokud interview identifikovalo dílčí kroky. Vrátí URL.
-   - **Jira**: dnes bez MCP → fallback na markdown s poznámkou, že po připojení
-     Jira MCP půjde zakládat přímo (postup v `references/jira.md`).
+   - **Linear** (MCP): `save_issue` / `save_project` / `save_initiative` podle
+     `target`; team/projekt z configu, jinak dotazem (`list_teams` /
+     `list_projects`). Hierarchie: epic = parent issue s pod-issues; projekt
+     (project-brief) volitelně s issues uvnitř (sekce `## Child issues`);
+     initiative = `save_initiative` → per projekt `save_project` navázaný na
+     initiative → per issue `save_issue` s teamem a projektem. Issues per
+     projekt jsou u initiative volitelné — interview je nevynucuje, doplní se
+     později samostatnými běhy. Vrátí URL všeho založeného.
+   - **Jira**: issue type podle šablony — `epic` → Epic, `user-story` → Story,
+     `bug-report` → Bug, ostatní šablony s `target: issue` → Task;
+     `target: initiative/project` zůstávají jako dosud (Epic + vysvětlení).
+     Bez MCP fallback na markdown (postup v `references/jira.md`).
+   - **Akiflow** (`references/akiflow.md`): vše jako tasky, hierarchie přes
+     `parent_task_id` (parent → subtasky; u initiative projekty jako subtasky
+     a jejich issues o úroveň níž). Při exportu nabídka existujících projektů
+     přes `list_projects`; Akiflow projekty se nikdy nezakládají; bez volby
+     projektu jde task do inboxu. Bez MCP fallback na markdown.
    - **Markdown**: vypsat / uložit do souboru — funguje vždy, i bez jakéhokoli MCP.
+
+   Překlad abstraktního `target` na konkrétní objekty vlastní každý reference
+   soubor (jednotná struktura: mapování → vytvoření → ztrátovost → report a
+   chyby); SKILL.md zůstává tracker-agnostický. **Ztrátovost:** pokud cílová
+   platforma neumí část draftu reprezentovat (např. bohatý project-brief do
+   Akiflow tasku), skill před exportem řekne, co se sploští, a nabídne uložení
+   plného markdownu jako zálohy.
+
+## Analýza codebase (dle docs/epics/analyza-codebase.md)
+
+Mezi volbou formátu a rozhovorem (fáze 1.5): pokud se nápad týká kódu
+v aktuálním repozitáři (detekce: nápad popisuje změnu chování softwaru
+a pracovní adresář obsahuje odpovídající kód), skill provede rychlý
+(~30–60 s) read-only průzkum přes subagenta — struktura repa, dotčené moduly,
+existující podobná funkcionalita. Nálezy slouží výhradně dvěma účelům:
+informované otázky v rozhovoru (místo obecných) a dekompozice na child issues
+podle reálných švů kódu. Ve výstupním work itemu se žádná technická sekce
+neobjeví; žádné odhady pracnosti. Při nerelevanci se průzkum přeskočí a tok
+je beze změny; bez dostupného subagenta krátký přímý průzkum, případně
+přeskočení — analýza nikdy neblokuje tok. Postup v
+`references/codebase-analysis.md`.
+
+## Rozpracování podřízených položek (dle docs/epics/rozpracovani-podrizenych-polozek.md)
+
+Nová fáze 3.5 mezi schválením draftu a exportem: pokud schválený draft
+obsahuje sekci s podřízenými položkami (Projects, Child issues), flamingo
+nabídne výběr, které z nich rozpracovat do plných sub-draftů. Mapování:
+položka projektu → šablona project-brief, položka issue → user-story (uživatel
+může zvolit jinak). Každá vybraná položka projde vlastním mini-rozhovorem
+v `depth` své šablony a vlastním schválením; schválený sub-draft s dalšími
+podřízenými položkami nabídne rekurzivně další úroveň — bez pevného limitu,
+dokud uživatel neřekne dost. Nerozpracované položky zůstávají jednořádkové.
+
+Export zakládá celý strom v jednom průchodu shora dolů: rozpracovaná položka
+dostane jako popis tělo svého sub-draftu (místo jednořádkového odkazu na
+parenta) a její děti se zakládají rekurzivně. **Ztrátovost hloubky:** každá
+reference deklaruje maximální reprezentovatelnou hloubku; hlubší úrovně se
+sploští do popisu nejhlubšího reprezentovatelného objektu (varování + nabídka
+markdown zálohy dle fáze 4). **Chyba uprostřed exportu:** report toho, co už
+vzniklo (URL/id), zbytek stromu vypsat jako markdown, stop — nic se neztrácí.
+
+Šablona initiative a verification spec se upraví: prázdný seznam issues už
+není popisován jako očekávaný stav s odkazem na „pozdější běh" — odkazuje se
+na nabídku rozpracování po draftu. Non-goals: `depth` zůstává konstantou
+šablony; rozhovor nad initiative issues nevynucuje; existující objekty
+v trackeru se nedoplňují.
 
 ## Ošetření chyb
 
