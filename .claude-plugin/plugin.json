@@ -1,6 +1,10 @@
 {
   "name": "flamingo",
   "version": "0.1.0",
-  "description": "Turn vague ideas into structured work items (user story, bug report, epic, project brief) through an adaptive interview, then file them to Linear or Akiflow or emit markdown.",
-  "author": { "name": "Daniel Maslo" }
+  "description": "Turn vague ideas into structured work items (user story, bug report, epic, project brief, initiative) through an adaptive interview, then file them to Linear or Akiflow via MCP or emit markdown.",
+  "author": { "name": "Daniel Maslo" },
+  "homepage": "https://github.com/navigaracom/flamingo",
+  "repository": "https://github.com/navigaracom/flamingo",
+  "license": "MIT",
+  "keywords": ["linear", "akiflow", "jira", "user-story", "epic", "issue", "interview", "requirements"]
 }
