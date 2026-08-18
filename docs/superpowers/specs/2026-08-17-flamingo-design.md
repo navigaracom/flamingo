@@ -137,6 +137,31 @@ je beze změny; bez dostupného subagenta krátký přímý průzkum, případn�
 přeskočení — analýza nikdy neblokuje tok. Postup v
 `references/codebase-analysis.md`.
 
+## Rozpracování podřízených položek (dle docs/epics/rozpracovani-podrizenych-polozek.md)
+
+Nová fáze 3.5 mezi schválením draftu a exportem: pokud schválený draft
+obsahuje sekci s podřízenými položkami (Projects, Child issues), flamingo
+nabídne výběr, které z nich rozpracovat do plných sub-draftů. Mapování:
+položka projektu → šablona project-brief, položka issue → user-story (uživatel
+může zvolit jinak). Každá vybraná položka projde vlastním mini-rozhovorem
+v `depth` své šablony a vlastním schválením; schválený sub-draft s dalšími
+podřízenými položkami nabídne rekurzivně další úroveň — bez pevného limitu,
+dokud uživatel neřekne dost. Nerozpracované položky zůstávají jednořádkové.
+
+Export zakládá celý strom v jednom průchodu shora dolů: rozpracovaná položka
+dostane jako popis tělo svého sub-draftu (místo jednořádkového odkazu na
+parenta) a její děti se zakládají rekurzivně. **Ztrátovost hloubky:** každá
+reference deklaruje maximální reprezentovatelnou hloubku; hlubší úrovně se
+sploští do popisu nejhlubšího reprezentovatelného objektu (varování + nabídka
+markdown zálohy dle fáze 4). **Chyba uprostřed exportu:** report toho, co už
+vzniklo (URL/id), zbytek stromu vypsat jako markdown, stop — nic se neztrácí.
+
+Šablona initiative a verification spec se upraví: prázdný seznam issues už
+není popisován jako očekávaný stav s odkazem na „pozdější běh" — odkazuje se
+na nabídku rozpracování po draftu. Non-goals: `depth` zůstává konstantou
+šablony; rozhovor nad initiative issues nevynucuje; existující objekty
+v trackeru se nedoplňují.
+
 ## Ošetření chyb
 
 - Linear MCP nedostupné / selže → degradace na markdown výstup, nikdy ne ztráta draftu.
