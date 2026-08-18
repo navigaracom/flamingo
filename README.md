@@ -1,4 +1,8 @@
-# Flamingo
+<p align="center">
+  <img src="assets/logo.svg" width="96" alt="Flamingo logo" />
+</p>
+
+<h1 align="center">Flamingo</h1>
 
 Claude Code plugin that turns vague ideas into structured work items
 (user story, bug report, epic, project brief, initiative) through an
