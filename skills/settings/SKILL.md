@@ -1,6 +1,6 @@
 ---
 name: settings
-description: Use when the user wants to configure flamingo — default output language, tracker, Linear team/project — or manage custom flamingo templates in ~/.claude/flamingo/.
+description: Use when the user explicitly asks to configure flamingo — default output language, tracker, Linear team/project — or to manage custom flamingo templates in ~/.claude/flamingo/.
 ---
 
 # Flamingo — settings
