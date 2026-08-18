@@ -1,183 +1,185 @@
 # Flamingo — design
 
-**Datum:** 2026-08-17
-**Stav:** návrh ke schválení
+**Date:** 2026-08-17
+**Status:** draft awaiting approval
 
-## Účel
+## Purpose
 
-Flamingo je Claude Code plugin, který přetváří vágní nápady do strukturovaného zadání
-(user story, bug report, epic, project brief…) formou adaptivního interview. Výsledek
-uživateli ukáže jako náhled, nechá ho doladit, a po schválení ho založí v trackeru
-(dnes Linear přes MCP; Jira připravena na později) nebo vydá jako markdown.
+Flamingo is a Claude Code plugin that turns vague ideas into structured work items
+(user story, bug report, epic, project brief…) through an adaptive interview. It shows
+the user the result as a preview, lets them refine it, and after approval files it in
+the tracker (today Linear via MCP; Jira prepared for later) or emits it as markdown.
 
-## Rozhodnutí z brainstormingu
+## Decisions from brainstorming
 
-- **Výstup:** vždy nejdřív náhled + iterativní ladění; export do trackeru až po schválení.
-- **Formáty:** vestavěné šablony + vlastní uživatelské šablony (vlastní přepisují vestavěné).
-- **Interview:** adaptivní hloubka podle cílového formátu (bug = 2–3 otázky, epic = důkladné grilování).
-- **Jazyk:** výchozí jazyk výstupu v configu, override argumentem; interview probíhá v jazyce uživatele.
-- **Balení:** od začátku struktura pluginu (název **flamingo**), pro vývoj symlink skillu
-  do `~/.claude/skills/`, aby se změny projevily okamžitě.
+- **Output:** always preview first + iterative refinement; export to the tracker only after approval.
+- **Formats:** built-in templates + custom user templates (custom ones override built-ins).
+- **Interview:** adaptive depth based on the target format (bug = 2–3 questions, epic = thorough grilling).
+- **Language:** default output language in config, overridable by argument; the interview happens in the user's language.
+- **Packaging:** plugin structure from the start (name **flamingo**), for development a symlink of the skill
+  into `~/.claude/skills/`, so changes take effect immediately.
 
-## Struktura repa
+## Repo structure
 
 ```
-flamingo/                          ← toto repo
+flamingo/                          ← this repo
   .claude-plugin/
-    plugin.json                    ← manifest: name "flamingo", verze, popis
+    plugin.json                    ← manifest: name "flamingo", version, description
   skills/
     flamingo/
-      SKILL.md                     ← celý workflow
-      templates/                   ← vestavěné šablony
+      SKILL.md                     ← the whole workflow
+      templates/                   ← built-in templates
         user-story.md
         bug-report.md
         epic.md
         project-brief.md
         initiative.md
       references/
-        linear.md                  ← mapování polí šablon na Linear MCP tooly
-        jira.md                    ← postup pro Jiru (dnes fallback na markdown)
-        codebase-analysis.md       ← read-only průzkum repa pro informovaný rozhovor
-        akiflow.md                 ← export do Akiflow (tasky se subtasky)
-  docs/superpowers/specs/          ← tento dokument
+        linear.md                  ← mapping of template fields to Linear MCP tools
+        jira.md                    ← procedure for Jira (today falls back to markdown)
+        codebase-analysis.md       ← read-only repo survey for an informed interview
+        akiflow.md                 ← export to Akiflow (tasks with subtasks)
+  docs/superpowers/specs/          ← this document
 ```
 
-Vývojový symlink: `~/.claude/skills/flamingo → <repo>/skills/flamingo`.
-Vyvolání: `/flamingo <nápad>`.
+Development symlink: `~/.claude/skills/flamingo → <repo>/skills/flamingo`.
+Invocation: `/flamingo <idea>`.
 
-Distribuce později: přidat `marketplace.json`, kolegové instalují přes `/plugin`.
-Obsah skillu se přitom nemění.
+Distribution later: add `marketplace.json`, colleagues install via `/plugin`.
+The skill's content doesn't change as a result.
 
-## Uživatelská data (mimo repo i plugin)
+## User data (outside the repo and the plugin)
 
 `~/.claude/flamingo/`:
 
-- `config.md` — výchozí jazyk výstupu, výchozí tracker, výchozí Linear team/projekt.
-- `templates/*.md` — vlastní šablony; soubor se stejným názvem jako vestavěná šablona ji přepíše.
+- `config.md` — default output language, default tracker, default Linear team/project.
+- `templates/*.md` — custom templates; a file with the same name as a built-in template overrides it.
 
-Důvod oddělení: update pluginu přepíše jeho cache, uživatelův config a šablony musí přežít.
-Pokud config neexistuje, skill funguje s rozumnými defaulty (jazyk výstupu = jazyk vstupu,
-tracker se vybere při exportu) a na konci prvního běhu nabídne config založit.
+Reason for the separation: a plugin update overwrites its cache, but the user's config and
+templates must survive. If the config doesn't exist, the skill works with sensible defaults
+(output language = input language, tracker chosen at export time) and offers to create the
+config at the end of the first run.
 
-## Formát šablon
+## Template format
 
-Markdown s frontmatter; frontmatter řídí interview i export:
+Markdown with frontmatter; the frontmatter drives both the interview and the export:
 
 ```markdown
 ---
 name: user-story
-description: Uživatelský příběh s akceptačními kritérii
-depth: standard          # quick | standard | deep — hloubka interview
-target: issue            # issue | project | initiative — co se v trackeru založí
+description: A user story with acceptance criteria
+depth: standard          # quick | standard | deep — interview depth
+target: issue            # issue | project | initiative — what gets created in the tracker
 ---
 ## Story
-Jako <role> chci <cíl>, abych <přínos>.
+As a <role> I want <goal>, so that <benefit>.
 
-## Akceptační kritéria
+## Acceptance criteria
 - …
 ```
 
-- `depth: quick` — 2–3 otázky jen na kritické mezery (typicky bug-report).
-- `depth: standard` — pokrytí všech sekcí šablony (user-story).
-- `depth: deep` — grilování à la grill-me: cíle, ne-cíle, scope, rizika,
-  akceptační kritéria, edge cases (epic, project-brief).
+- `depth: quick` — 2–3 questions targeting only critical gaps (typically bug-report).
+- `depth: standard` — covers all sections of the template (user-story).
+- `depth: deep` — grill-me-style questioning: goals, non-goals, scope, risks,
+  acceptance criteria, edge cases (epic, project-brief).
 
-Tělo šablony je kostra výstupu; komentáře `<!-- -->` v těle mohou nést
-pokyny pro tazatele (na co se ptát, co je povinné) a do výstupu se nedostanou.
+The template body is the skeleton of the output; `<!-- -->` comments in the body can carry
+instructions for the interviewer (what to ask, what's required) and never make it into the output.
 
-## Workflow skillu
+## Skill workflow
 
-1. **Vstup.** `/flamingo <nápad>`; bez argumentu se zeptá na nápad.
-   Override jazyka výstupu prefixem, např. `/flamingo en: …`.
-2. **Volba formátu.** Načte config a šablony (vestavěné ∪ vlastní). Pokud formát
-   jasně plyne ze vstupu, navrhne ho k potvrzení; jinak nabídne výběr (AskUserQuestion).
-3. **Interview.** Otázky po jedné, kde to jde s možnostmi na výběr, v jazyce, kterým
-   uživatel píše. Hloubka dle `depth`. Uživatel může kdykoli říct „stačí, sepiš to" —
-   nezjištěné informace draft explicitně označí jako `[domněnka: …]`.
-4. **Draft a ladění.** Vyplní šablonu v jazyce výstupu, ukáže náhled, iteruje
-   podle připomínek, dokud uživatel neschválí.
-5. **Export.** Nabídne cíle:
-   - **Linear** (MCP): `save_issue` / `save_project` / `save_initiative` podle
-     `target`; team/projekt z configu, jinak dotazem (`list_teams` /
-     `list_projects`). Hierarchie: epic = parent issue s pod-issues; projekt
-     (project-brief) volitelně s issues uvnitř (sekce `## Child issues`);
-     initiative = `save_initiative` → per projekt `save_project` navázaný na
-     initiative → per issue `save_issue` s teamem a projektem. Issues per
-     projekt jsou u initiative volitelné — interview je nevynucuje, doplní se
-     později samostatnými běhy. Vrátí URL všeho založeného.
-   - **Jira**: issue type podle šablony — `epic` → Epic, `user-story` → Story,
-     `bug-report` → Bug, ostatní šablony s `target: issue` → Task;
-     `target: initiative/project` zůstávají jako dosud (Epic + vysvětlení).
-     Bez MCP fallback na markdown (postup v `references/jira.md`).
-   - **Akiflow** (`references/akiflow.md`): vše jako tasky, hierarchie přes
-     `parent_task_id` (parent → subtasky; u initiative projekty jako subtasky
-     a jejich issues o úroveň níž). Při exportu nabídka existujících projektů
-     přes `list_projects`; Akiflow projekty se nikdy nezakládají; bez volby
-     projektu jde task do inboxu. Bez MCP fallback na markdown.
-   - **Markdown**: vypsat / uložit do souboru — funguje vždy, i bez jakéhokoli MCP.
+1. **Input.** `/flamingo <idea>`; without an argument, it asks for the idea.
+   Output-language override via prefix, e.g. `/flamingo en: …`.
+2. **Format selection.** Loads the config and templates (built-in ∪ custom). If the format
+   is clearly implied by the input, it's proposed for confirmation; otherwise a selection is
+   offered (AskUserQuestion).
+3. **Interview.** Questions one at a time, with multiple-choice options where possible, in the
+   language the user writes in. Depth per `depth`. The user can say "that's enough, write it up"
+   at any point — undetermined information is explicitly marked in the draft as `[assumption: …]`.
+4. **Draft and refinement.** Fills in the template in the output language, shows a preview, iterates
+   on feedback until the user approves.
+5. **Export.** Offers destinations:
+   - **Linear** (MCP): `save_issue` / `save_project` / `save_initiative` based on
+     `target`; team/project from config, otherwise asked (`list_teams` /
+     `list_projects`). Hierarchy: epic = parent issue with sub-issues; project
+     (project-brief) optionally with issues inside (`## Child issues` section);
+     initiative = `save_initiative` → per-project `save_project` linked to the
+     initiative → per-issue `save_issue` with team and project. Issues per
+     project are optional at the initiative level — the interview doesn't force them, they
+     get added later in separate runs. Returns the URL of everything created.
+   - **Jira**: issue type based on template — `epic` → Epic, `user-story` → Story,
+     `bug-report` → Bug, other templates with `target: issue` → Task;
+     `target: initiative/project` stay as they are today (Epic + explanation).
+     Without MCP, falls back to markdown (procedure in `references/jira.md`).
+   - **Akiflow** (`references/akiflow.md`): everything as tasks, hierarchy via
+     `parent_task_id` (parent → subtasks; for an initiative, projects become subtasks
+     and their issues one level below). On export, existing projects are offered
+     via `list_projects`; Akiflow projects are never created; without a chosen
+     project the task goes to the inbox. Without MCP, falls back to markdown.
+   - **Markdown**: print / save to a file — always works, even without any MCP.
 
-   Překlad abstraktního `target` na konkrétní objekty vlastní každý reference
-   soubor (jednotná struktura: mapování → vytvoření → ztrátovost → report a
-   chyby); SKILL.md zůstává tracker-agnostický. **Ztrátovost:** pokud cílová
-   platforma neumí část draftu reprezentovat (např. bohatý project-brief do
-   Akiflow tasku), skill před exportem řekne, co se sploští, a nabídne uložení
-   plného markdownu jako zálohy.
+   Translating the abstract `target` into concrete objects is owned by each reference
+   file (a unified structure: mapping → creation → lossiness → report and
+   errors); SKILL.md stays tracker-agnostic. **Lossiness:** if the target
+   platform can't represent part of the draft (e.g. a rich project-brief into an
+   Akiflow task), the skill states what will be flattened before exporting and
+   offers to save the full markdown as a backup.
 
-## Analýza codebase (dle docs/epics/analyza-codebase.md)
+## Codebase analysis (per docs/epics/codebase-analysis.md)
 
-Mezi volbou formátu a rozhovorem (fáze 1.5): pokud se nápad týká kódu
-v aktuálním repozitáři (detekce: nápad popisuje změnu chování softwaru
-a pracovní adresář obsahuje odpovídající kód), skill provede rychlý
-(~30–60 s) read-only průzkum přes subagenta — struktura repa, dotčené moduly,
-existující podobná funkcionalita. Nálezy slouží výhradně dvěma účelům:
-informované otázky v rozhovoru (místo obecných) a dekompozice na child issues
-podle reálných švů kódu. Ve výstupním work itemu se žádná technická sekce
-neobjeví; žádné odhady pracnosti. Při nerelevanci se průzkum přeskočí a tok
-je beze změny; bez dostupného subagenta krátký přímý průzkum, případně
-přeskočení — analýza nikdy neblokuje tok. Postup v
+Between format selection and the interview (phase 1.5): if the idea relates to code
+in the current repository (detection: the idea describes a change in software
+behavior and the working directory contains matching code), the skill runs a quick
+(~30–60 s) read-only survey via a subagent — repo structure, affected modules,
+existing similar functionality. The findings serve exactly two purposes:
+informed interview questions (instead of generic ones) and decomposition into child
+issues that match real seams in the code. No technical section appears in the
+output work item; no effort estimates. If irrelevant, the survey is skipped and the
+flow is unchanged; without an available subagent, a short direct survey is done instead, or it's
+skipped entirely — the analysis never blocks the flow. Procedure in
 `references/codebase-analysis.md`.
 
-## Rozpracování podřízených položek (dle docs/epics/rozpracovani-podrizenych-polozek.md)
+## Elaborating child items (per docs/epics/child-item-elaboration.md)
 
-Nová fáze 3.5 mezi schválením draftu a exportem: pokud schválený draft
-obsahuje sekci s podřízenými položkami (Projects, Child issues), flamingo
-nabídne výběr, které z nich rozpracovat do plných sub-draftů. Mapování:
-položka projektu → šablona project-brief, položka issue → user-story (uživatel
-může zvolit jinak). Každá vybraná položka projde vlastním mini-rozhovorem
-v `depth` své šablony a vlastním schválením; schválený sub-draft s dalšími
-podřízenými položkami nabídne rekurzivně další úroveň — bez pevného limitu,
-dokud uživatel neřekne dost. Nerozpracované položky zůstávají jednořádkové.
+A new phase 3.5 between draft approval and export: if the approved draft
+contains a section with child items (Projects, Child issues), flamingo
+offers a selection of which ones to elaborate into full sub-drafts. Mapping:
+a project item → project-brief template, an issue item → user-story (the user
+can choose otherwise). Each selected item goes through its own mini-interview
+at the `depth` of its template and its own approval; an approved sub-draft with further
+child items recursively offers the next level — with no fixed limit,
+until the user says enough. Un-elaborated items remain one-liners.
 
-Export zakládá celý strom v jednom průchodu shora dolů: rozpracovaná položka
-dostane jako popis tělo svého sub-draftu (místo jednořádkového odkazu na
-parenta) a její děti se zakládají rekurzivně. **Ztrátovost hloubky:** každá
-reference deklaruje maximální reprezentovatelnou hloubku; hlubší úrovně se
-sploští do popisu nejhlubšího reprezentovatelného objektu (varování + nabídka
-markdown zálohy dle fáze 4). **Chyba uprostřed exportu:** report toho, co už
-vzniklo (URL/id), zbytek stromu vypsat jako markdown, stop — nic se neztrácí.
+Export creates the whole tree in a single top-down pass: an elaborated item
+gets the body of its sub-draft as its description (instead of a one-line reference to
+the parent), and its children are created recursively. **Depth lossiness:** each
+reference declares the maximum representable depth; deeper levels are
+flattened into the description of the deepest representable object (a warning + offer
+of a markdown backup, per phase 4). **Mid-export error:** report what has already
+been created (URL/id), print the rest of the tree as markdown, stop — nothing is lost.
 
-Šablona initiative a verification spec se upraví: prázdný seznam issues už
-není popisován jako očekávaný stav s odkazem na „pozdější běh" — odkazuje se
-na nabídku rozpracování po draftu. Non-goals: `depth` zůstává konstantou
-šablony; rozhovor nad initiative issues nevynucuje; existující objekty
-v trackeru se nedoplňují.
+The initiative template and the verification spec are updated: an empty
+issues list is no longer described as an expected state referencing "a later run" —
+instead it points to the post-draft elaboration offer. Non-goals: `depth`
+remains a template constant; the interview doesn't force issues on an
+initiative; existing objects already in the tracker are not filled in further.
 
-## Ošetření chyb
+## Error handling
 
-- Linear MCP nedostupné / selže → degradace na markdown výstup, nikdy ne ztráta draftu.
-- Rozpracované interview: draft se průběžně drží v konverzaci; skill nikdy nezakládá
-  nic v trackeru bez explicitního schválení náhledu.
+- Linear MCP unavailable / fails → degrade to markdown output, never lose the draft.
+- Interrupted interview: the draft is held in the conversation throughout; the skill never creates
+  anything in the tracker without explicit approval of the preview.
 
-## Testování
+## Testing
 
-Podle superpowers:writing-skills (TDD pro skilly): pressure scénáře se subagenty —
-(a) vágní jednověté zadání → bug-report, (b) velký nápad → epic s grilováním,
-(c) česky psaný vstup + anglický výstup dle configu, (d) export bez dostupného
-Linear MCP. Baseline bez skillu → skill → ověření compliance.
+Per superpowers:writing-skills (TDD for skills): pressure scenarios with subagents —
+(a) a vague one-sentence request → bug-report, (b) a big idea → epic with grilling,
+(c) Czech input + English output per config, (d) export without Linear MCP available.
+Baseline without the skill → skill → compliance verification.
 
-## Mimo rozsah (YAGNI)
+## Out of scope (YAGNI)
 
-- Přílohy a obrázky.
-- Hromadné zakládání nesouvisejících issues (kromě epic → pod-issues).
-- Synchronizace zpět z trackeru do dokumentu.
-- Přímá integrace Jira REST API s API klíči — až bude reálná potřeba.
+- Attachments and images.
+- Bulk creation of unrelated issues (except epic → sub-issues).
+- Syncing back from the tracker into the document.
+- Direct Jira REST API integration with API keys — until there's a real need.
