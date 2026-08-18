@@ -164,6 +164,39 @@ instead it points to the post-draft elaboration offer. Non-goals: `depth`
 remains a template constant; the interview doesn't force issues on an
 initiative; existing objects already in the tracker are not filled in further.
 
+## Entry skills (discussed 2026-08-18)
+
+The plugin ships thin entry skills alongside the main `flamingo` skill, giving
+plugin users tier-named entry points (`/flamingo:issue`, `/flamingo:epic`,
+`/flamingo:project`, `/flamingo:initiative`), a nicer alias for the full flow
+(`/flamingo:idea`), and configuration management (`/flamingo:settings`).
+
+- **Tier entries are thin wrappers** (~10 lines): read the main SKILL.md,
+  follow its workflow, template preselected, Phase 1 format selection skipped.
+  No workflow logic is duplicated. The `issue` entry picks user-story vs
+  bug-report from the idea (asking when unclear).
+- **Tier names are the union of platform vocabularies** — issue (Linear),
+  epic (Jira), project (Linear), initiative (Linear) — one established name
+  per tier. No per-platform alias skills: Linear Issue ≈ Jira Story ≈ Akiflow
+  Task would triple the entries for the same tiers. Descriptions mention the
+  platform synonyms instead, so users find their tier whatever tracker
+  vocabulary they think in.
+- **Scale check (both directions):** preselection skips the format question,
+  not judgment — when the idea's scope clearly mismatches the chosen tier,
+  the skill says so once and offers the better-fitting template; the user's
+  choice wins. This is the early net for a "wrong alias"; the late net is the
+  existing export lossiness warning.
+- **Model-trigger stays on the main skill only.** Entry-skill descriptions
+  are phrased "use when the user explicitly asks…" so automatic invocation
+  doesn't roulette among synonymous entries.
+- **`settings`** is the one entry with own logic: show/edit
+  `~/.claude/flamingo/config.md` and list or scaffold custom templates. It
+  never modifies plugin files.
+- Symlink users keep `/flamingo` only; entry skills are a plugin-install
+  benefit (generic names like `issue` are too collision-prone as global
+  personal skills). Custom user templates get no entry skill — they remain
+  reachable through the main flow's template choice.
+
 ## Error handling
 
 - Linear MCP unavailable / fails → degrade to markdown output, never lose the draft.
