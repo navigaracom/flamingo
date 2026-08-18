@@ -44,6 +44,11 @@ second `save_project` with no issue calls (empty bullet list respected). URLs
 of everything created reported, including the note that the second project has
 no issues yet. Matches references/linear.md @ 4e89870.
 
+*Note (2026-08-18): the "no issues yet, to be detailed later" behavior
+described above predates Phase 3.5 — since the elaboration phase, empty child
+lists trigger the post-draft elaboration offer instead of a pointer to a later
+run.*
+
 ## Scenario F — codebase analysis (Task 8): PASS
 
 Variant 1 (relevant: "add CSV export to the reports page" in a TS web app repo,

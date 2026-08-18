@@ -94,6 +94,30 @@ Rules:
 3. Ask whether to approve or what to change. Every edit request produces an
    updated full preview. Iterate until the user approves.
 
+## Phase 3.5 — Elaborate child items (optional)
+
+If the approved draft has a section of subordinate items (one corresponding
+to the template's `## Projects` or `## Child issues`), offer — once — to
+elaborate some of them into full drafts before exporting, so the export
+creates real content instead of bare one-line stubs. Present the items as a
+multi-select choice; "none" is a fine answer and skips this phase.
+
+For each selected item:
+1. Map it to a template: a project item → `project-brief`, an issue item →
+   `user-story` — unless the user asks for a different template.
+2. Run that template's interview at its own `depth`, scoped to the item —
+   answers already implied by the parent draft are not asked again.
+3. Draft, preview, and refine the sub-draft exactly as in Phase 3 —
+   sub-drafts need the same explicit approval.
+4. If the approved sub-draft itself has a subordinate-items section, offer
+   this same elaboration for its items. There is no fixed depth limit — the
+   user says when to stop.
+
+Keep the tree together: each sub-draft is labeled with the item it details.
+Items left un-elaborated stay as one-liners. Templates' `depth` is never
+overridden, and the parent interview never demands child detail up front —
+elaboration happens only here, after approval, only on request.
+
 ## Phase 4 — Export
 
 After approval, offer destinations, config default first:
@@ -103,6 +127,9 @@ After approval, offer destinations, config default first:
 - **Akiflow** — read `references/akiflow.md` next to this SKILL.md and follow it.
 - **Markdown** — print the final document; offer to save it to a file the user
   names. Always available, and the fallback whenever a tracker is unreachable.
+
+When Phase 3.5 produced sub-drafts, export creates the whole tree in one pass,
+per the destination reference's Create section.
 
 After a successful tracker export, report the created item's URL(s).
 

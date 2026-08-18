@@ -7,8 +7,9 @@ target: initiative
 <!-- Interviewer: deep grilling — problem/vision, goals, non-goals, success
      criteria, and the projects this initiative spans. Projects are required
      (name + goal each); issues per project are optional — do not force the
-     user to enumerate every issue now; they can run /flamingo later per
-     project. -->
+     user to enumerate every issue now — after the draft is approved, the
+     elaboration offer (Phase 3.5) lets them flesh out selected projects and
+     issues in the same run. -->
 
 # <initiative name>
 
