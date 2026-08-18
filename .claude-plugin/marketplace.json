@@ -1,0 +1,14 @@
+{
+  "name": "navigara",
+  "owner": {
+    "name": "Navigara",
+    "url": "https://github.com/navigaracom"
+  },
+  "plugins": [
+    {
+      "name": "flamingo",
+      "source": "./",
+      "description": "Turn vague ideas into structured work items (user story, bug report, epic, project brief, initiative) through an adaptive interview, then file them to Linear or Akiflow via MCP or emit markdown."
+    }
+  ]
+}
