@@ -36,8 +36,22 @@ are namespaced), or just describe your idea and let the skill trigger.
 
 ## Use
 
-    /flamingo <your vague idea>
-    /flamingo en: <idea>        # override output language
+    /flamingo <your vague idea>     # symlink install
+    /flamingo en: <idea>            # override output language
+
+Plugin installs get namespaced entry points:
+
+| Entry | What you get |
+|---|---|
+| `/flamingo:idea` | full workflow, format chosen during the interview |
+| `/flamingo:issue` | a single work item (Linear Issue · Jira Story/Bug · Akiflow Task) |
+| `/flamingo:epic` | a decomposable batch of work (Jira Epic · Linear parent issue) |
+| `/flamingo:project` | a deliverable with milestones (Linear Project) |
+| `/flamingo:initiative` | a multi-project strategic effort (Linear Initiative) |
+| `/flamingo:settings` | configure defaults and custom templates |
+
+Entries preselect the tier but sanity-check it: if your idea is clearly
+bigger or smaller than the entry you picked, flamingo offers the better fit.
 
 ## Configuration (optional)
 
