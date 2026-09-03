@@ -1,0 +1,27 @@
+name: CI - PR Validation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: List changed files
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: git diff --name-status "$BASE_SHA" HEAD
